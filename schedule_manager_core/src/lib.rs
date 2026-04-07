@@ -24,7 +24,7 @@ pub struct Event {
     pub event_date_time: DateTime<Local>,
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn new_hours(start: *const c_char, end: *const c_char) -> *mut c_char {
     let start = unsafe { CStr::from_ptr(start).to_str().unwrap() };
     let end = unsafe { CStr::from_ptr(end).to_str().unwrap() };
@@ -36,4 +36,27 @@ pub extern "C" fn new_hours(start: *const c_char, end: *const c_char) -> *mut c_
 
     let json = serde_json::to_string(&work_hours).unwrap();
     CString::new(json).unwrap().into_raw()
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn new_event(event_name: *const c_char, arg: *const c_char, event_date_time: *const c_char) -> *mut c_char {
+    let event_name = unsafe { CStr::from_ptr(event_name).to_str().unwrap() };
+    let arg = unsafe { CStr::from_ptr(arg).to_str().unwrap() };
+    let event_date_time = unsafe { CStr::from_ptr(event_date_time).to_str().unwrap() };
+
+    let event = Event {
+        event_name: event_name.to_string(),
+        arg: arg.to_string(),
+        event_date_time: DateTime::parse_from_rfc3339(event_date_time).unwrap().with_timezone(&Local),
+    };
+
+    let json = serde_json::to_string(&event).unwrap();
+    CString::new(json).unwrap().into_raw()
+}
+
+
+#[unsafe(no_mangle)]
+pub extern "C" fn free_string(ptr: *mut c_char) {
+    if ptr.is_null() { return; }
+    unsafe { drop(CString::from_raw(ptr)); }
 }

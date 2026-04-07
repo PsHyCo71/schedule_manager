@@ -5,6 +5,11 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <Target Name="BuildRust" BeforeTargets="Build">
+    <Exec Command="cargo build --release --manifest-path ..\schedule_manager_core\Cargo.toml" />
+  </Target>
 
 </Project>

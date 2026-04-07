@@ -1,18 +1,13 @@
-use serde::{Serialize, Deserialize};
 use chrono::DateTime;
-use chrono::NaiveTime;
 use chrono::Local;
+use chrono::NaiveTime;
+use serde::{Deserialize, Serialize};
+use std::ffi::{CStr, CString, c_char};
 
 #[derive(Serialize, Deserialize)]
 pub struct WorkHours {
     pub start: NaiveTime,
     pub end: NaiveTime,
-}
-
-impl WorkHours {
-    pub fn new_hours(start:NaiveTime, end: NaiveTime) -> Self {
-        WorkHours { start, end }
-    }
 }
 
 #[derive(Serialize, Deserialize)]
@@ -22,12 +17,6 @@ pub struct WorkTask {
     pub task_time: NaiveTime,
 }
 
-impl WorkTask {
-    pub fn new_task(task_name: String, arg: String, task_time: NaiveTime) -> Self {
-        WorkTask { task_name, arg, task_time }
-    }
-}
-
 #[derive(Serialize, Deserialize)]
 pub struct Event {
     pub event_name: String,
@@ -35,8 +24,16 @@ pub struct Event {
     pub event_date_time: DateTime<Local>,
 }
 
-impl Event {
-    pub fn new_event(event_name: String, arg: String, event_date_time: DateTime<Local>) -> Self{
-        Event { event_name, arg, event_date_time }
-    }
+#[no_mangle]
+pub extern "C" fn new_hours(start: *const c_char, end: *const c_char) -> *mut c_char {
+    let start = unsafe { CStr::from_ptr(start).to_str().unwrap() };
+    let end = unsafe { CStr::from_ptr(end).to_str().unwrap() };
+
+    let work_hours = WorkHours {
+        start: NaiveTime::parse_from_str(start, "%H:%M").unwrap(),
+        end: NaiveTime::parse_from_str(end, "%H:%M").unwrap(),
+    };
+
+    let json = serde_json::to_string(&work_hours).unwrap();
+    CString::new(json).unwrap().into_raw()
 }

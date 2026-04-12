@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,9 +7,14 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
+  
   <Target Name="BuildRust" BeforeTargets="Build">
     <Exec Command="cargo build --release --manifest-path ..\schedule_manager_core\Cargo.toml" />
+  </Target>
+
+  <Target Name="CopyRustDll" AfterTargets="Build">
+    <Copy SourceFiles="..\schedule_manager_core\target\release\schedule_manager_core.dll"
+      DestinationFolder="$(OutDir)" />
   </Target>
 
 </Project>

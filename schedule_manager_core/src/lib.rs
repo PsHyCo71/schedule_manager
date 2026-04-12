@@ -39,6 +39,22 @@ pub extern "C" fn new_hours(start: *const c_char, end: *const c_char) -> *mut c_
 }
 
 #[unsafe(no_mangle)]
+pub extern "C" fn new_task(task_name: *const c_char, arg: *const c_char, task_time: *const c_char) -> *mut c_char {
+    let task_name = unsafe { CStr::from_ptr(task_name).to_str().unwrap() };
+    let arg = unsafe { CStr::from_ptr(arg).to_str().unwrap() };
+    let task_time = unsafe { CStr::from_ptr(task_time).to_str().unwrap() };
+
+    let work_task = WorkTask {
+        task_name: task_name.to_string(),
+        arg: arg.to_string(),
+        task_time: NaiveTime::parse_from_str(task_time, "%H:%M").unwrap(),
+    };
+
+    let json = serde_json::to_string(&work_task).unwrap();
+    CString::new(json).unwrap().into_raw()
+}
+
+#[unsafe(no_mangle)]
 pub extern "C" fn new_event(event_name: *const c_char, arg: *const c_char, event_date_time: *const c_char) -> *mut c_char {
     let event_name = unsafe { CStr::from_ptr(event_name).to_str().unwrap() };
     let arg = unsafe { CStr::from_ptr(arg).to_str().unwrap() };

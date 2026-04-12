@@ -12,39 +12,39 @@ namespace ScheduleManager.RustModels;
 public partial class RustBridge
 {
     [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_hours", StringMarshalling = StringMarshalling.Utf8)]
-    private static partial IntPtr NewWorkHours(string Start, string End);
+    private static partial IntPtr NewWorkHours(string start, string end);
 
     [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_task", StringMarshalling = StringMarshalling.Utf8)]
-    private static partial IntPtr NewTask(string TaskName, string Arg, string TaskTime);
-    [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_event", StringMarshalling = StringMarshalling.Utf8)]
-    private static partial IntPtr NewEvent(string EventName, string Arg, string EventDateTime);
+    private static partial IntPtr NewTask(string taskName, string arg, string taskTime);
+    [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_entry", StringMarshalling = StringMarshalling.Utf8)]
+    private static partial IntPtr NewEvent(string entryName, string arg, string entryDateTime);
     [LibraryImport("schedule_manager_core.dll", EntryPoint = "free_string")]
-    private static partial void FreeString(IntPtr Ptr);
+    private static partial void FreeString(IntPtr ptr);
 
-    public static WorkHours CreateWorkHours(string Start, string End)
+    public static WorkHours CreateWorkHours(string start, string end)
     {
-        IntPtr Ptr = NewWorkHours(Start, End);
-        string json = Marshal.PtrToStringUTF8(Ptr)!;
-        FreeString(Ptr);
-        WorkHours WorkHours = JsonSerializer.Deserialize<WorkHours>(json);
-        return WorkHours;
+        IntPtr ptr = NewWorkHours(start, end);
+        string json = Marshal.PtrToStringUTF8(ptr)!;
+        FreeString(ptr);
+        WorkHours workHours = JsonSerializer.Deserialize<WorkHours>(json);
+        return workHours;
     }
 
-    public static WorkTask CreateTask(string TaskName, string Arg, string TaskTime)
+    public static WorkTask CreateTask(string taskName, string arg, string taskTime)
     {
-        IntPtr Ptr = NewTask(TaskName, Arg, TaskTime);
-        string json = Marshal.PtrToStringUTF8(Ptr)!;
-        FreeString(Ptr);
-        WorkTask WorkTask = JsonSerializer.Deserialize<WorkTask>(json);
-        return WorkTask;
+        IntPtr ptr = NewTask(taskName, arg, taskTime);
+        string json = Marshal.PtrToStringUTF8(ptr)!;
+        FreeString(ptr);
+        WorkTask workTask = JsonSerializer.Deserialize<WorkTask>(json);
+        return workTask;
     }
 
-    public static Event CreateEvent(string EventName, string Arg, string EventDateTime)
+    public static Entry CreateEvent(string entryName, string arg, string entryDateTime)
     {
-        IntPtr Ptr = NewEvent(EventName, Arg, EventDateTime);
-        string json = Marshal.PtrToStringUTF8(Ptr)!;
-        FreeString(Ptr);
-        Event Event = JsonSerializer.Deserialize<Event>(json);
-        return Event;
+        IntPtr ptr = NewEvent(entryName, arg, entryDateTime);
+        string json = Marshal.PtrToStringUTF8(ptr)!;
+        FreeString(ptr);
+        Entry entry = JsonSerializer.Deserialize<Entry>(json);
+        return entry;
     }
 }

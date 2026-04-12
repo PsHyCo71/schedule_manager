@@ -18,10 +18,10 @@ pub struct WorkTask {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct Event {
-    pub event_name: String,
+pub struct Entry {
+    pub entry_name: String,
     pub arg: String,
-    pub event_date_time: DateTime<Local>,
+    pub entry_date_time: DateTime<Local>,
 }
 
 #[unsafe(no_mangle)]
@@ -55,18 +55,18 @@ pub extern "C" fn new_task(task_name: *const c_char, arg: *const c_char, task_ti
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn new_event(event_name: *const c_char, arg: *const c_char, event_date_time: *const c_char) -> *mut c_char {
-    let event_name = unsafe { CStr::from_ptr(event_name).to_str().unwrap() };
+pub extern "C" fn new_event(entry_name: *const c_char, arg: *const c_char, entry_date_time: *const c_char) -> *mut c_char {
+    let entry_name = unsafe { CStr::from_ptr(entry_name).to_str().unwrap() };
     let arg = unsafe { CStr::from_ptr(arg).to_str().unwrap() };
-    let event_date_time = unsafe { CStr::from_ptr(event_date_time).to_str().unwrap() };
+    let entry_date_time = unsafe { CStr::from_ptr(entry_date_time).to_str().unwrap() };
 
-    let event = Event {
-        event_name: event_name.to_string(),
+    let entry = Entry {
+        entry_name: entry_name.to_string(),
         arg: arg.to_string(),
-        event_date_time: DateTime::parse_from_rfc3339(event_date_time).unwrap().with_timezone(&Local),
+        entry_date_time: DateTime::parse_from_rfc3339(entry_date_time).unwrap().with_timezone(&Local),
     };
 
-    let json = serde_json::to_string(&event).unwrap();
+    let json = serde_json::to_string(&entry).unwrap();
     CString::new(json).unwrap().into_raw()
 }
 

@@ -4,33 +4,33 @@ namespace ScheduleMAnager.RustModels;
 public struct WorkHours
 {
     [JsonPropertyName("start")]
-    public string Start { get; set; }   // HH:MM
+    public string start { get; set; }   // HH:MM
 
     [JsonPropertyName("end")]
-    public string End { get; set; }     // HH:MM
+    public string end { get; set; }     // HH:MM
 }
 
 public struct WorkTask
 {
     [JsonPropertyName("task_name")]
-    public string TaskName { get; set; }
+    public string taskName { get; set; }
 
     [JsonPropertyName("arg")]
-    public string Arg { get; set; }
+    public string arg { get; set; }
 
     [JsonPropertyName("task_time")]
-    public string TaskTime { get; set; }     // HH:MM
+    public string taskTime { get; set; }     // HH:MM
 
 }
 
-public struct Event
+public struct Entry
 {
-    [JsonPropertyName("event_name")]
-    public string EventName { get; set; }
+    [JsonPropertyName("entry_name")]
+    public string entryName { get; set; }
 
     [JsonPropertyName("arg")]
-    public string Arg { get; set; }
+    public string arg { get; set; }
 
-    [JsonPropertyName("event_date_time")]
-    public string EventDateTime { get; set; }   // YYYY-MM-DDTHH:MM+HH:00    
+    [JsonPropertyName("entry_date_time")]
+    public string entryDateTime { get; set; }   // YYYY-MM-DDTHH:MM+HH:00    
 }

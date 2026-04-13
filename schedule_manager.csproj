@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="schedule_manager\src\Program.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="schedule_manager_app\schedule_manager_app.csproj" />
+    </ItemGroup>
+
+</Project>

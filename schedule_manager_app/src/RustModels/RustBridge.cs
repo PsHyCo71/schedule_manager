@@ -13,7 +13,6 @@ public partial class RustBridge
 {
     [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_hours", StringMarshalling = StringMarshalling.Utf8)]
     private static partial IntPtr NewWorkHours(string start, string end);
-
     [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_task", StringMarshalling = StringMarshalling.Utf8)]
     private static partial IntPtr NewTask(string taskName, string arg, string taskTime);
     [LibraryImport("schedule_manager_core.dll", EntryPoint = "new_entry", StringMarshalling = StringMarshalling.Utf8)]

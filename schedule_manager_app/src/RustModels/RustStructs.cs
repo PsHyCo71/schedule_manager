@@ -1,13 +1,12 @@
-using System.Text.Json.Serialization;
-namespace ScheduleMAnager.RustModels;
+namespace ScheduleManager.RustModels;
 
 public struct WorkHours
 {
     [JsonPropertyName("start")]
-    public string start { get; set; }   // HH:MM
+    public string start { get; set; }   // HH:MM:SS
 
     [JsonPropertyName("end")]
-    public string end { get; set; }     // HH:MM
+    public string end { get; set; }     // HH:MM:SS
 }
 
 public struct WorkTask
@@ -19,7 +18,7 @@ public struct WorkTask
     public string arg { get; set; }
 
     [JsonPropertyName("task_time")]
-    public string taskTime { get; set; }     // HH:MM
+    public string taskTime { get; set; }     // HH:MM:SS
 
 }
 
@@ -32,5 +31,16 @@ public struct Entry
     public string arg { get; set; }
 
     [JsonPropertyName("entry_date_time")]
-    public string entryDateTime { get; set; }   // YYYY-MM-DDTHH:MM+HH:00    
+    public string entryDateTime { get; set; }   // YYYY-MM-DDTHH:MM:SS    
+}
+
+public struct Schedule
+{
+    public WorkHours? workHours { get; set; }
+    public List<WorkTask> tasks { get; set; } = new List<WorkTask>();
+    public List<Entry> entries { get; set; } = new List<Entry>();
+
+    public Schedule()
+    {
+    }
 }

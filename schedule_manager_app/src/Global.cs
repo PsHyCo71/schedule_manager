@@ -1,0 +1,9 @@
+global using ScheduleManager.Core;
+global using ScheduleManager.RustModels;
+global using ScheduleManager.Data;
+global using ScheduleManager.Parsing;
+global using System;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using System.Runtime.InteropServices;
+global using System.CommandLine;

@@ -1,5 +1,5 @@
 use chrono::DateTime;
-use chrono::Local;
+use chrono::NaiveDateTime;
 use chrono::NaiveTime;
 use serde::{Deserialize, Serialize};
 use std::ffi::{CStr, CString, c_char};
@@ -21,7 +21,7 @@ pub struct WorkTask {
 pub struct Entry {
     pub entry_name: String,
     pub arg: String,
-    pub entry_date_time: DateTime<Local>,
+    pub entry_date_time: NaiveDateTime,
 }
 
 #[unsafe(no_mangle)]
@@ -55,7 +55,7 @@ pub extern "C" fn new_task(task_name: *const c_char, arg: *const c_char, task_ti
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn new_event(entry_name: *const c_char, arg: *const c_char, entry_date_time: *const c_char) -> *mut c_char {
+pub extern "C" fn new_entry(entry_name: *const c_char, arg: *const c_char, entry_date_time: *const c_char) -> *mut c_char {
     let entry_name = unsafe { CStr::from_ptr(entry_name).to_str().unwrap() };
     let arg = unsafe { CStr::from_ptr(arg).to_str().unwrap() };
     let entry_date_time = unsafe { CStr::from_ptr(entry_date_time).to_str().unwrap() };
@@ -63,7 +63,7 @@ pub extern "C" fn new_event(entry_name: *const c_char, arg: *const c_char, entry
     let entry = Entry {
         entry_name: entry_name.to_string(),
         arg: arg.to_string(),
-        entry_date_time: DateTime::parse_from_rfc3339(entry_date_time).unwrap().with_timezone(&Local),
+        entry_date_time: DateTime::parse_from_rfc3339(entry_date_time).unwrap().naive_local(),
     };
 
     let json = serde_json::to_string(&entry).unwrap();

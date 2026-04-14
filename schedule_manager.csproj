@@ -9,11 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="schedule_manager\src\Program.cs" />
+        <Compile Include="schedule_manager_launcher\src\Program.cs" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="schedule_manager_app\schedule_manager_app.csproj" />
     </ItemGroup>
+
+    <Target Name="BuildRust" BeforeTargets="Build">
+        <Exec Command="cargo build --release --manifest-path .\schedule_manager_core\Cargo.toml" />
+    </Target>
+
+    <Target Name="CopyRustDll" AfterTargets="Build">
+        <Copy SourceFiles=".\schedule_manager_core\target\release\schedule_manager_core.dll"
+      DestinationFolder="$(OutDir)" />
+    </Target>
+
 
 </Project>
